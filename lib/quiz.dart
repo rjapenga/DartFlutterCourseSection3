@@ -6,20 +6,26 @@ import "data/questions.dart";
 import "results_screen.dart";
 
 class Quiz extends StatefulWidget {
-  const Quiz({super.key});
+  const Quiz({super.key}); // This is required and is the constructor
 
-  @override
+  @override // This tells Dart that createState was inherited but now overridden
   State<Quiz> createState() {
     return _QuizState();
   }
 }
 
 class _QuizState extends State<Quiz> {
-  var activeScreen = "start_screen";
-  List<String> selectedAnswers = [];
+  // This is required
+  var screens = ['start_screen', 'questions_screen', 'result_screen'];
+  String activeScreen = screens[
+      0]; // Stinks as a way to identify screens. Need a way that is not typo sensitive.
+  // If you call it start-screen not caught until run time.
+  List<String> selectedAnswers =
+      []; // List is a class so in C this is just char * selectedAnswers = ...
 
   void switchScreen() {
     setState(() {
+      // Set State is used to force re-rendering
       activeScreen = "questions_screen";
     });
   }
