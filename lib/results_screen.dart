@@ -8,8 +8,10 @@ class ResultsScreen extends StatelessWidget {
     super.key,
     required this.chosenAnswers,
     required this.onRestart,
+    required this.onStart,
   });
   final void Function() onRestart;
+  final void Function() onStart;
 
   final List<String> chosenAnswers;
 
@@ -50,25 +52,38 @@ class ResultsScreen extends StatelessWidget {
               'You have answered $numCorrectAnswers out of $numTotalQuestions questions correctly! $encourageDiscourage.',
               style: GoogleFonts.lato(
                 color: Colors.white,
-                fontSize: 24,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(
-              height: 30,
+              height: 10,
             ),
             QuestionsSummary(summaryData),
             const SizedBox(
-              height: 30,
+              height: 10,
             ),
-            TextButton.icon(
+            ElevatedButton.icon(
               onPressed: onRestart,
               style: TextButton.styleFrom(
                 foregroundColor: Colors.white,
+                backgroundColor: Colors.blue[400],
               ),
               icon: const Icon(Icons.refresh),
               label: const Text('Restart Quiz!'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ElevatedButton.icon(
+              onPressed: onStart,
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blue[400],
+              ),
+              icon: const Icon(Icons.start),
+              label: const Text('Restart App!'),
             )
           ],
         ),

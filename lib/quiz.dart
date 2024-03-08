@@ -15,10 +15,15 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-  // This is required
-  var screens = ['start_screen', 'questions_screen', 'result_screen'];
-  String activeScreen = screens[
-      0]; // Stinks as a way to identify screens. Need a way that is not typo sensitive.
+  var screens = {
+    // This is a Map type
+    "START": 'start_screen',
+    "QUESTIONS": 'questions_screen',
+    "RESULTS": 'result_screen',
+  };
+  var activeScreen = "";
+
+  // The old way stinks as a way to identify screens. Need a way that is not typo sensitive.
   // If you call it start-screen not caught until run time.
   List<String> selectedAnswers =
       []; // List is a class so in C this is just char * selectedAnswers = ...
@@ -26,7 +31,11 @@ class _QuizState extends State<Quiz> {
   void switchScreen() {
     setState(() {
       // Set State is used to force re-rendering
-      activeScreen = "questions_screen";
+      if (screens.containsKey('QUESTIONS')) {
+        activeScreen = screens['QUESTIONS']!;
+      } else {
+        activeScreen = 'questions_screen';
+      }
     });
   }
 
@@ -34,7 +43,11 @@ class _QuizState extends State<Quiz> {
     selectedAnswers.add(answer);
     if (selectedAnswers.length == questions.length) {
       setState(() {
-        activeScreen = "results_screen";
+        if (screens.containsKey('RESULTS')) {
+          activeScreen = screens['RESULTS']!;
+        } else {
+          activeScreen = 'start_screen';
+        }
       });
     }
   }
@@ -42,24 +55,41 @@ class _QuizState extends State<Quiz> {
   void restartQuiz() {
     setState(() {
       selectedAnswers = [];
-      activeScreen = 'questions_screen';
+      if (screens.containsKey('QUESTIONS')) {
+        activeScreen = screens['QUESTIONS']!;
+      } else {
+        activeScreen = 'questions_screen';
+      }
+    });
+  }
+
+  void restartApp() {
+    setState(() {
+      selectedAnswers = [];
+      if (screens.containsKey('START')) {
+        activeScreen = screens['START']!;
+      }
     });
   }
 
   @override
   Widget build(context) {
     Widget screenWidget = StartScreen(switchScreen);
-
-    if (activeScreen == 'questions_screen') {
+    if (activeScreen == "" && screens.containsKey('START')) {
+      activeScreen = screens['START']!;
+    }
+    if (screens.containsKey('QUESTIONS') &&
+        activeScreen == screens['QUESTIONS']!) {
       screenWidget = QuestionsScreen(
         onSelectAnswer: chooseAnswer,
       );
     }
 
-    if (activeScreen == 'results_screen') {
+    if (screens.containsKey('RESULTS') && activeScreen == screens['RESULTS']!) {
       screenWidget = ResultsScreen(
         chosenAnswers: selectedAnswers,
         onRestart: restartQuiz,
+        onStart: restartApp,
       );
     }
 
