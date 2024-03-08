@@ -4,8 +4,9 @@ class StartScreen extends StatelessWidget {
   const StartScreen(this.startQuiz, {super.key});
   final void Function() startQuiz;
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     return Center(
+      // why not Scaffold
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'start_screen.dart';
+import 'start_screen.dart'; // I don't know how much is imported - not like include in C
 import 'questions_screen.dart';
 import "data/questions.dart";
 import "results_screen.dart";
+
+// The old way stinks as a way to identify screens. Need a way that is not typo sensitive.
+// If you call it start-screen not caught until run time.
+// Using enums works
+enum Screens { startKey, questionsKey, resultsKey }
 
 class Quiz extends StatefulWidget {
   const Quiz({super.key}); // This is required and is the constructor
@@ -15,27 +20,29 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-  var screens = {
-    // This is a Map type
-    "START": 'start_screen',
-    "QUESTIONS": 'questions_screen',
-    "RESULTS": 'result_screen',
+/*  static const String startKey = 'START';
+  static const String questionsKey = "QUESTIONS";
+  static const String resultsKey = "RESULTS";
+
+  final Map screens = const {
+    startKey: 'start_screen',
+    questionsKey: 'questions_screen',
+    resultsKey: 'result_screen',
   };
-  var activeScreen = "";
+*/
+  var activeScreen = Screens.startKey;
 
   // The old way stinks as a way to identify screens. Need a way that is not typo sensitive.
   // If you call it start-screen not caught until run time.
+  // Using enums works
   List<String> selectedAnswers =
       []; // List is a class so in C this is just char * selectedAnswers = ...
 
   void switchScreen() {
     setState(() {
+      // setState is used to update the UI
       // Set State is used to force re-rendering
-      if (screens.containsKey('QUESTIONS')) {
-        activeScreen = screens['QUESTIONS']!;
-      } else {
-        activeScreen = 'questions_screen';
-      }
+      activeScreen = Screens.questionsKey;
     });
   }
 
@@ -43,11 +50,7 @@ class _QuizState extends State<Quiz> {
     selectedAnswers.add(answer);
     if (selectedAnswers.length == questions.length) {
       setState(() {
-        if (screens.containsKey('RESULTS')) {
-          activeScreen = screens['RESULTS']!;
-        } else {
-          activeScreen = 'start_screen';
-        }
+        activeScreen = Screens.resultsKey;
       });
     }
   }
@@ -55,41 +58,32 @@ class _QuizState extends State<Quiz> {
   void restartQuiz() {
     setState(() {
       selectedAnswers = [];
-      if (screens.containsKey('QUESTIONS')) {
-        activeScreen = screens['QUESTIONS']!;
-      } else {
-        activeScreen = 'questions_screen';
-      }
+      activeScreen = Screens.questionsKey;
     });
   }
 
   void restartApp() {
     setState(() {
       selectedAnswers = [];
-      if (screens.containsKey('START')) {
-        activeScreen = screens['START']!;
-      }
+      activeScreen = Screens.startKey;
     });
   }
 
   @override
   Widget build(context) {
     Widget screenWidget = StartScreen(switchScreen);
-    if (activeScreen == "" && screens.containsKey('START')) {
-      activeScreen = screens['START']!;
-    }
-    if (screens.containsKey('QUESTIONS') &&
-        activeScreen == screens['QUESTIONS']!) {
+    if (activeScreen == Screens.questionsKey) {
       screenWidget = QuestionsScreen(
-        onSelectAnswer: chooseAnswer,
+        onSelectAnswer:
+            chooseAnswer, // we are passing a function to the widget.
       );
     }
 
-    if (screens.containsKey('RESULTS') && activeScreen == screens['RESULTS']!) {
+    if (activeScreen == Screens.resultsKey) {
       screenWidget = ResultsScreen(
-        chosenAnswers: selectedAnswers,
-        onRestart: restartQuiz,
-        onStart: restartApp,
+        chosenAnswers: selectedAnswers, // Passing a list for results to fill
+        onRestart: restartQuiz, // passing a function for a button to press
+        onStart: restartApp, // passing a function for a button to press
       );
     }
 
