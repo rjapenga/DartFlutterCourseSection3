@@ -70,7 +70,7 @@ class _QuizState extends State<Quiz> {
   }
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     Widget screenWidget = StartScreen(switchScreen);
     if (activeScreen == Screens.questionsKey) {
       screenWidget = QuestionsScreen(
@@ -89,6 +89,7 @@ class _QuizState extends State<Quiz> {
 
     return MaterialApp(
       home: Scaffold(
+        // Why not scaffold ever where?
         body: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
