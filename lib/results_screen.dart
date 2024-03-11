@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:google_fonts/google_fonts.dart";
 import 'data/questions.dart';
+import 'data/enums.dart';
 import 'questions_summary/questions_summary.dart';
 
 class ResultsScreen extends StatelessWidget {
@@ -15,16 +16,16 @@ class ResultsScreen extends StatelessWidget {
 
   final List<String> chosenAnswers;
 
-  List<Map<String, Object>> getSummaryData() {
-    final List<Map<String, Object>> summary = [];
+  List<Map<Enum, Object>> getSummaryData() {
+    final List<Map<Enum, Object>> summary = [];
 
     for (var i = 0; i < chosenAnswers.length; i++) {
       summary.add(
         {
-          'question_index': i,
-          'question': questions[i].text,
-          'correct_answer': questions[i].answers[0],
-          'user_answer': chosenAnswers[i]
+          Summary.questionIndex: i,
+          Summary.question: questions[i].text,
+          Summary.correctAnswer: questions[i].answers[0],
+          Summary.userAnswer: chosenAnswers[i]
         },
       );
     }
@@ -37,7 +38,7 @@ class ResultsScreen extends StatelessWidget {
     final numTotalQuestions = questions.length;
     final summaryData = getSummaryData();
     final numCorrectAnswers = summaryData.where((data) {
-      return data['user_answer'] == data['correct_answer'];
+      return data[Summary.userAnswer] == data[Summary.correctAnswer];
     }).length;
     final encourageDiscourage =
         numCorrectAnswers >= 4 ? "Well done!!!" : "Keep working";

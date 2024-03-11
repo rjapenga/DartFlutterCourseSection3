@@ -4,11 +4,7 @@ import 'start_screen.dart'; // I don't know how much is imported - not like incl
 import 'questions_screen.dart';
 import "data/questions.dart";
 import "results_screen.dart";
-
-// The old way stinks as a way to identify screens. Need a way that is not typo sensitive.
-// If you call it start-screen not caught until run time.
-// Using enums works
-enum Screens { startKey, questionsKey, resultsKey }
+import 'data/enums.dart';
 
 class Quiz extends StatefulWidget {
   const Quiz({super.key}); // This is required and is the constructor
